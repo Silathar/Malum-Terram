@@ -6,6 +6,6 @@ commands:
    class:
       description: Change class.
       usage: /<command>
-   kit marksman:
+   marksman:
       description: Give the marksman kit.
       usage: /<command>
