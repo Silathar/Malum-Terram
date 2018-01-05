@@ -44,7 +44,7 @@ public class Main extends JavaPlugin{
         	return true;
     	}
     	
-    	if (cmd.getName().equalsIgnoreCase("kit marksman") && sender instanceof Player) {
+    	if (cmd.getName().equalsIgnoreCase("marksman") && sender instanceof Player) {
     		
         	Player player = (Player) sender;
         	PlayerInventory playerInv = player.getInventory();
