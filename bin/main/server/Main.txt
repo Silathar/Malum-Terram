@@ -1,0 +1,68 @@
+package me.silathar;
+
+import org.bukkit.Material;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.plugin.java.JavaPlugin;
+
+import classes.Marksman;
+import classes.Scout;
+import classes.Pyromancer;
+import net.md_5.bungee.api.ChatColor;
+
+public class Main extends JavaPlugin{
+	
+    public void onJoin(PlayerJoinEvent event) {
+        Player player = event.getPlayer();
+
+        player.sendMessage(ChatColor.RED + "Welcome to the server!");
+    }
+    
+    public void onEnable(){
+        getServer().getConsoleSender().sendMessage(ChatColor.GREEN + "\n\nSavage Wars Loaded\n\n");
+        getServer().getPluginManager().registerEvents(new Marksman(), this);
+        getServer().getPluginManager().registerEvents(new Scout(), this);
+        getServer().getPluginManager().registerEvents(new Pyromancer(), this);
+    }
+
+    public void onDisable(){
+        getServer().getConsoleSender().sendMessage(ChatColor.RED + "\n\nSavage Wars Disabled\n\n");
+    }
+    
+    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+    	
+    	if (cmd.getName().equalsIgnoreCase("class") && sender instanceof Player) {
+    		
+        	Player player = (Player) sender;
+        	
+        	player.sendMessage(ChatColor.WHITE + "Your class is " + ChatColor.RED + "Marksman");
+        	
+        	return true;
+    	}
+    	
+    	if (cmd.getName().equalsIgnoreCase("kit marksman") && sender instanceof Player) {
+    		
+        	Player player = (Player) sender;
+        	PlayerInventory playerInv = player.getInventory();
+        	
+    		playerInv.addItem(new ItemStack(Material.BOW, 1));
+    		playerInv.addItem(new ItemStack(Material.ARROW, 64));
+    		playerInv.addItem(new ItemStack(Material.FEATHER, 1));
+    		playerInv.addItem(new ItemStack(Material.APPLE, 16));
+    		playerInv.addItem(new ItemStack(Material.LEATHER_HELMET, 1));
+    		playerInv.addItem(new ItemStack(Material.LEATHER_CHESTPLATE, 1));
+    		playerInv.addItem(new ItemStack(Material.LEATHER_LEGGINGS, 1));
+    		playerInv.addItem(new ItemStack(Material.LEATHER_BOOTS, 1));
+    		player.sendMessage(ChatColor.GOLD + "You got the marksman kit!");
+    		
+    		return true;
+    	}
+    	
+    	return false;	
+    }
+    
+}

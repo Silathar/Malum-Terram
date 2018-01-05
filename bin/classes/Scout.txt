@@ -1,0 +1,56 @@
+package classes;
+
+import org.bukkit.Material;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerLoginEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+import org.bukkit.util.Vector;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
+
+import net.md_5.bungee.api.ChatColor;
+
+public class Scout implements Listener {
+
+    @EventHandler
+    public void onSwordReady(PlayerInteractEvent event) {
+
+        Action action = event.getAction();
+        Player player = event.getPlayer();
+
+        if(player.getInventory().getItemInMainHand().getType().equals(Material.IRON_SWORD)) {
+	        if (action.equals(Action.LEFT_CLICK_AIR)) {
+	        	player.sendMessage(ChatColor.BLUE + "You ready your sword!");
+	        }
+	    }
+
+
+    }
+    
+    @EventHandler
+    public void onHeal(PlayerInteractEvent event){
+
+        Action action = event.getAction();
+        Player player = event.getPlayer();
+        
+        if (player.getInventory().contains(Material.PAPER, 2)) {
+	        if (player.getInventory().getItemInMainHand().getType().equals(Material.PAPER)) {
+		        if (action.equals(Action.LEFT_CLICK_BLOCK)) {
+		        	player.sendMessage(ChatColor.BLUE + "You bandage yourself!");
+		        	
+		        	player.setHealth((float)player.getHealth() + (float)1);
+		        	player.getInventory().getItemInMainHand().setAmount(player.getInventory().getItemInMainHand().getAmount()-2);
+		        }
+		    }
+        }
+    }
+
+}

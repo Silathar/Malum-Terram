@@ -1,0 +1,103 @@
+package classes;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerLoginEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+import org.bukkit.util.Vector;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
+
+import net.md_5.bungee.api.ChatColor;
+
+public class Warden implements Listener {
+
+    @EventHandler
+    public void onHoeReady(PlayerInteractEvent event) {
+
+        Action action = event.getAction();
+        Player player = event.getPlayer();
+
+        if(player.getInventory().getItemInMainHand().getType().equals(Material.IRON_HOE)) {
+	        if (action.equals(Action.LEFT_CLICK_AIR)) {
+	        	player.sendMessage(ChatColor.BLUE + "You ready your hoe!");
+	        }
+	    }
+    }
+
+
+    @EventHandler
+    public boolean onWhip(PlayerInteractEvent event) {
+
+        Action action = event.getAction();
+        Player player = event.getPlayer();
+
+        if(player.getInventory().getItemInMainHand().getType().equals(Material.LEASH)) {
+	        if (action.equals(Action.LEFT_CLICK_AIR)) {
+	        	player.sendMessage(ChatColor.BLUE + "You ready your whip!");
+	        	
+	        	for(Entity e : getNearbyEntities(player.getLocation(), 10))
+	        		player.sendMessage((e instanceof Player ? ((Player) e)
+	        					.getName() : e.getType().name()));
+	        		
+	        	return false;
+	        }
+	    }
+		return false;
+    }
+    
+    public List<Entity> getNearbyEntities(Location l, int size) {
+    	List<Entity> entities = new ArrayList<Entity>();
+    	
+    	for(Entity e : l.getWorld().getEntities())
+    		if(l.distance(e.getLocation())<=size)
+    			entities.add(e);
+    	
+    	return entities;
+    }
+
+    @EventHandler
+    public void onJail(PlayerInteractEvent event) {
+
+        Action action = event.getAction();
+        Player player = event.getPlayer();
+
+        if(player.getInventory().getItemInMainHand().getType().equals(Material.CHAINMAIL_HELMET)) {
+	        if (action.equals(Action.LEFT_CLICK_AIR)) {
+	        	player.sendMessage(ChatColor.BLUE + "You ready your cell!");
+	        }
+	    }
+    }
+    
+    @EventHandler
+    public void onHeal(PlayerInteractEvent event){
+
+        Action action = event.getAction();
+        Player player = event.getPlayer();
+        
+        if (player.getInventory().contains(Material.PAPER, 2)) {
+	        if (player.getInventory().getItemInMainHand().getType().equals(Material.PAPER)) {
+		        if (action.equals(Action.LEFT_CLICK_BLOCK)) {
+		        	player.sendMessage(ChatColor.BLUE + "You bandage yourself!");
+		        	
+		        	player.setHealth((float)player.getHealth() + (float)1);
+		        	player.getInventory().getItemInMainHand().setAmount(player.getInventory().getItemInMainHand().getAmount()-2);
+		        }
+		    }
+        }
+    }
+
+}
