@@ -1,0 +1,11 @@
+name: Savage
+main: me.silathar.Main
+author: Silathar Games
+version: 0
+commands:
+   class:
+      description: Change class.
+      usage: /<command>
+   kit marksman:
+      description: Give the marksman kit.
+      usage: /<command>
