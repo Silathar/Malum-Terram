@@ -1,11 +1,14 @@
 name: Savage
 main: me.silathar.Main
-author: Silathar Games
+author: Acryius/Silathar
 version: 0
 commands:
+   motd:
+      description: Check the servers motd.
+      usage: /<command>
    class:
       description: Change class.
       usage: /<command>
-   marksman:
+   kit marksman:
       description: Give the marksman kit.
       usage: /<command>
