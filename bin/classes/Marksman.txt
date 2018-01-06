@@ -19,6 +19,7 @@ import net.md_5.bungee.api.ChatColor;
 
 public class Marksman implements Listener {
 	boolean isReady = false;
+	boolean isLeaping = false;
 	int cooldown = 3;
 	
 	@EventHandler
@@ -44,11 +45,14 @@ public class Marksman implements Listener {
 
 	@EventHandler
 	public void onFallDamage(EntityDamageEvent event) {
-		boolean isLeaping = false;
+		
 		if (event.getEntity() instanceof Player) {
 			Player player = (Player) event.getEntity();
 			if (event.getCause() == DamageCause.FALL) {
-				event.setCancelled(true);
+				if (isLeaping == true) {
+					event.setCancelled(true);
+					isLeaping = false;
+				}
 			}
 		}
 	}
@@ -68,6 +72,7 @@ public class Marksman implements Listener {
 				Vector dir = player.getLocation().getDirection();
 				Vector vec = new Vector(dir.getX() * 1.8D, 1.7D, dir.getZ() * 1.6D);
 				player.setVelocity(vec);
+				isLeaping = true;
 
 				onFallDamage(null);
 
