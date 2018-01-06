@@ -1,50 +1,47 @@
 package classes;
 
 import org.bukkit.Material;
+import org.bukkit.entity.Fireball;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerLoginEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
-import org.bukkit.util.Vector;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
 import net.md_5.bungee.api.ChatColor;
 
 public class Pyromancer implements Listener {
-
-    @EventHandler
-    public void onSwordReady(PlayerInteractEvent event) {
-
-        Action action = event.getAction();
-        Player player = event.getPlayer();
-
-        if(player.getInventory().getItemInMainHand().getType().equals(Material.DIAMOND_SPADE)) {
-	        if (action.equals(Action.LEFT_CLICK_AIR)) {
-	        	player.sendMessage(ChatColor.BLUE + "You ready your spade!");
-	        }
-	    }
-
-
-    }
     
-    @EventHandler
-    public void onFireball(PlayerInteractEvent event){
+    public void DamageFunction(EntityDamageByEntityEvent dmg) {
+        if(dmg.getCause() == DamageCause.PROJECTILE){
+            if(dmg.getDamager() instanceof Fireball){
+                if(dmg.getEntity() instanceof Player){
+                	dmg.setDamage(40);
+                }
+            }
+        }   	
+    }
+			
+	@EventHandler
+    public void onFireball(PlayerInteractEvent event) {
 
         Action action = event.getAction();
         Player player = event.getPlayer();
         
         if (player.getInventory().getItemInMainHand().getType().equals(Material.BLAZE_POWDER)) {
-	        if (action.equals(Action.LEFT_CLICK_BLOCK)) {
+	        if (action.equals(Action.LEFT_CLICK_AIR)) {
 	        	player.sendMessage(ChatColor.BLUE + "You fire a fireball!");
 	        	
+                float yaw = player.getLocation().getYaw();
+                double D = 1.0;
+                double x = -D*Math.sin(yaw*Math.PI/180);
+                double z = D*Math.cos(yaw*Math.PI/180);
+                
+	        	Fireball fireball = player.getWorld().spawn(player.getLocation().add(x, 1.62, z), Fireball.class);
+	        	fireball.setVelocity(fireball.getLocation().getDirection().multiply(2.25));
+	        	fireball.setShooter(player);
 	        }
 	    }
     }
@@ -59,6 +56,30 @@ public class Pyromancer implements Listener {
 	        if (action.equals(Action.LEFT_CLICK_AIR)) {
 	        	player.sendMessage(ChatColor.BLUE + "You fire a barrage!");
 	        	
+                float yaw = player.getLocation().getYaw();
+                double D = 1.0;
+                double x = -D*Math.sin(yaw*Math.PI/180);
+                double z = D*Math.cos(yaw*Math.PI/180);
+                
+	        	Fireball fireball1 = player.getWorld().spawn(player.getLocation().add(x, 1.62, z), Fireball.class);
+	        	fireball1.setVelocity(fireball1.getLocation().getDirection().multiply(2.25));
+	        	fireball1.setShooter(player);
+	        
+	        	Fireball fireball2 = player.getWorld().spawn(player.getLocation().add(x+1, 1.65, z+1), Fireball.class);
+	        	fireball2.setVelocity(fireball2.getLocation().getDirection().multiply(2.25));
+	        	fireball2.setShooter(player);	        
+
+	        	Fireball fireball3 = player.getWorld().spawn(player.getLocation().add(x+2, 1.68, z+2), Fireball.class);
+	        	fireball3.setVelocity(fireball3.getLocation().getDirection().multiply(2.25));
+	        	fireball3.setShooter(player);	        
+	        	
+	        	Fireball fireball4 = player.getWorld().spawn(player.getLocation().add(x-1, 1.75, z-1), Fireball.class);
+	        	fireball4.setVelocity(fireball4.getLocation().getDirection().multiply(2.25));
+	        	fireball4.setShooter(player);
+	        	
+	        	Fireball fireball5 = player.getWorld().spawn(player.getLocation().add(x-2, 1.75, z-2), Fireball.class);
+	        	fireball5.setVelocity(fireball5.getLocation().getDirection().multiply(2.25));
+	        	fireball5.setShooter(player);	 
 	        }
 	    }
     }
@@ -70,9 +91,8 @@ public class Pyromancer implements Listener {
         Player player = event.getPlayer();
         
         if (player.getInventory().getItemInMainHand().getType().equals(Material.MAGMA_CREAM)) {
-	        if (action.equals(Action.LEFT_CLICK_BLOCK)) {
+        	if (action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK) {
 	        	player.sendMessage(ChatColor.BLUE + "You channel the phoenix!");
-	        	
 	        }
 	    }
     }
