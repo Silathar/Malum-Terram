@@ -118,6 +118,8 @@ public class Pyromancer implements Listener {
     
     @EventHandler
     public void addDamage(EntityDamageByEntityEvent event) {
+    	Entity entity = (Entity) event.getEntity();
+
     	
     	if (event.getDamager() instanceof Fireball) {
     		Fireball f = (Fireball) event.getDamager();
@@ -126,7 +128,7 @@ public class Pyromancer implements Listener {
 				if (isReady == true) {
 					event.setDamage(28.0);
 					player.sendMessage("Phoenix Damage: " + event.getFinalDamage());
-					player.sendMessage(ChatColor.RED + "You unchannel the phoenix!");
+					player.sendMessage(ChatColor.RED + "Your phoenix power decreases!");
 					isReady = false;
 					
 				} else {
@@ -137,19 +139,13 @@ public class Pyromancer implements Listener {
     		}
     	}
     	
-    	  Player entity = (Player) event.getEntity();
-    	  if(entity instanceof Player) {
-    		  //the attacker is a player
-    	  } else {
-    		  //the attacker is a mob
-    		  Player p = (Player) event.getDamager();
-    	  if(p instanceof Player) {
-    	    p.setFireTicks(60);
-    	  } else {
-    	    //no player
-    	    }
-    	  }
-
+    	
+		if(event.getDamager() instanceof Entity) {
+			entity.setFireTicks(80);
+			event.getDamager().setFireTicks(80);
+		
+			Bukkit.broadcastMessage(event.getDamager().getName());
+	    }
     }
 }
 
