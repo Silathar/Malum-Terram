@@ -1,29 +1,25 @@
 package classes;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Fireball;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
 import net.md_5.bungee.api.ChatColor;
 
 public class Pyromancer implements Listener {
-    
-    public void DamageFunction(EntityDamageByEntityEvent dmg) {
-        if(dmg.getCause() == DamageCause.PROJECTILE){
-            if(dmg.getDamager() instanceof Fireball){
-                if(dmg.getEntity() instanceof Player){
-                	dmg.setDamage(40);
-                }
-            }
-        }   	
-    }
-			
+	boolean isReady = false;
+	
 	@EventHandler
     public void onFireball(PlayerInteractEvent event) {
 
@@ -32,7 +28,7 @@ public class Pyromancer implements Listener {
         
         if (player.getInventory().getItemInMainHand().getType().equals(Material.BLAZE_POWDER)) {
 	        if (action.equals(Action.LEFT_CLICK_AIR)) {
-	        	player.sendMessage(ChatColor.BLUE + "You fire a fireball!");
+	        	player.sendMessage(ChatColor.YELLOW + "You fire a fireball!");
 	        	
                 float yaw = player.getLocation().getYaw();
                 double D = 1.0;
@@ -42,6 +38,10 @@ public class Pyromancer implements Listener {
 	        	Fireball fireball = player.getWorld().spawn(player.getLocation().add(x, 1.62, z), Fireball.class);
 	        	fireball.setVelocity(fireball.getLocation().getDirection().multiply(2.25));
 	        	fireball.setShooter(player);
+	        	fireball.setIsIncendiary(false);
+	        	fireball.setYield(0);
+
+	        	
 	        }
 	    }
     }
@@ -54,7 +54,7 @@ public class Pyromancer implements Listener {
         
         if (player.getInventory().getItemInMainHand().getType().equals(Material.BLAZE_ROD)) {
 	        if (action.equals(Action.LEFT_CLICK_AIR)) {
-	        	player.sendMessage(ChatColor.BLUE + "You fire a barrage!");
+	        	player.sendMessage(ChatColor.YELLOW + "You fire a barrage!");
 	        	
                 float yaw = player.getLocation().getYaw();
                 double D = 1.0;
@@ -64,22 +64,32 @@ public class Pyromancer implements Listener {
 	        	Fireball fireball1 = player.getWorld().spawn(player.getLocation().add(x, 1.62, z), Fireball.class);
 	        	fireball1.setVelocity(fireball1.getLocation().getDirection().multiply(2.25));
 	        	fireball1.setShooter(player);
-	        
-	        	Fireball fireball2 = player.getWorld().spawn(player.getLocation().add(x+1, 1.65, z+1), Fireball.class);
+	        	fireball1.setIsIncendiary(false);
+	        	fireball1.setYield(0);
+	        	
+	        	Fireball fireball2 = player.getWorld().spawn(player.getLocation().add(x+1.5, 1.65, z+1.5), Fireball.class);
 	        	fireball2.setVelocity(fireball2.getLocation().getDirection().multiply(2.25));
 	        	fireball2.setShooter(player);	        
-
-	        	Fireball fireball3 = player.getWorld().spawn(player.getLocation().add(x+2, 1.68, z+2), Fireball.class);
+	        	fireball2.setIsIncendiary(false);
+	        	fireball2.setYield(0);
+	        	
+	        	Fireball fireball3 = player.getWorld().spawn(player.getLocation().add(x+2.5, 1.68, z+2.5), Fireball.class);
 	        	fireball3.setVelocity(fireball3.getLocation().getDirection().multiply(2.25));
 	        	fireball3.setShooter(player);	        
+	        	fireball3.setIsIncendiary(false);
+	        	fireball3.setYield(0);
 	        	
-	        	Fireball fireball4 = player.getWorld().spawn(player.getLocation().add(x-1, 1.75, z-1), Fireball.class);
+	        	Fireball fireball4 = player.getWorld().spawn(player.getLocation().add(x-1.5, 1.75, z-1.5), Fireball.class);
 	        	fireball4.setVelocity(fireball4.getLocation().getDirection().multiply(2.25));
 	        	fireball4.setShooter(player);
+	        	fireball4.setIsIncendiary(false);
+	        	fireball4.setYield(0);
 	        	
-	        	Fireball fireball5 = player.getWorld().spawn(player.getLocation().add(x-2, 1.75, z-2), Fireball.class);
+	        	Fireball fireball5 = player.getWorld().spawn(player.getLocation().add(x-2.5, 1.75, z-2.5), Fireball.class);
 	        	fireball5.setVelocity(fireball5.getLocation().getDirection().multiply(2.25));
-	        	fireball5.setShooter(player);	 
+	        	fireball5.setShooter(player);	
+	        	fireball5.setIsIncendiary(false);
+	        	fireball5.setYield(0);
 	        }
 	    }
     }
@@ -92,9 +102,55 @@ public class Pyromancer implements Listener {
         
         if (player.getInventory().getItemInMainHand().getType().equals(Material.MAGMA_CREAM)) {
         	if (action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK) {
-	        	player.sendMessage(ChatColor.BLUE + "You channel the phoenix!");
+	        	
+				if (isReady == false) {
+					isReady = true;
+					player.sendMessage(ChatColor.BLUE + "You channel the phoenix!");
+
+				} else {
+					isReady = false;
+					player.sendMessage(ChatColor.RED + "You unchannel the phoenix!");
+				}
+
 	        }
 	    }
     }
+    
+    @EventHandler
+    public void addDamage(EntityDamageByEntityEvent event) {
+    	
+    	if (event.getDamager() instanceof Fireball) {
+    		Fireball f = (Fireball) event.getDamager();
+    		Player player = (Player) f.getShooter();
+    		if (f.getShooter() instanceof Player) {
+				if (isReady == true) {
+					event.setDamage(28.0);
+					player.sendMessage("Phoenix Damage: " + event.getFinalDamage());
+					player.sendMessage(ChatColor.RED + "You unchannel the phoenix!");
+					isReady = false;
+					
+				} else {
+					event.setDamage(22.0);
+					player.sendMessage("Phoenix Damage: " + event.getFinalDamage());
+				}
+    			
+    		}
+    	}
+    	
+    	  Player entity = (Player) event.getEntity();
+    	  if(entity instanceof Player) {
+    		  //the attacker is a player
+    	  } else {
+    		  //the attacker is a mob
+    		  Player p = (Player) event.getDamager();
+    	  if(p instanceof Player) {
+    	    p.setFireTicks(60);
+    	  } else {
+    	    //no player
+    	    }
+    	  }
 
+    }
 }
+
+
