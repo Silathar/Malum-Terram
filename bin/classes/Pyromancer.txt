@@ -126,6 +126,7 @@ public class Pyromancer implements Listener {
     		if (f.getShooter() instanceof Player) {
 				if (isReady == true) {
 					event.setDamage(28.0);
+					f.setIsIncendiary(true);
 					player.sendMessage("Phoenix Damage: " + event.getFinalDamage());
 					player.sendMessage(ChatColor.RED + "Your phoenix power decreases!");
 					isReady = false;
@@ -154,7 +155,7 @@ public class Pyromancer implements Listener {
 					}
 				} else {
 					//Hit by mob
-					event.getDamager().setFireTicks(80);
+					event.getDamager().setFireTicks(100);
 				}
 				
 			}
