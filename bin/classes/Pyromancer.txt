@@ -118,8 +118,6 @@ public class Pyromancer implements Listener {
     
     @EventHandler
     public void addDamage(EntityDamageByEntityEvent event) {
-    	Entity entity = (Entity) event.getEntity();
-
     	
     	if (event.getDamager() instanceof Fireball) {
     		Fireball f = (Fireball) event.getDamager();
@@ -141,8 +139,10 @@ public class Pyromancer implements Listener {
     	
     	
 		if(event.getDamager() instanceof Entity) {
-			entity.setFireTicks(80);
-			event.getDamager().setFireTicks(80);
+			Player player = (Player) event.getEntity();
+			if (!(event.getDamager().getName() == player.getName())) {
+				event.getDamager().setFireTicks(80);
+			}
 		
 			Bukkit.broadcastMessage(event.getDamager().getName());
 	    }
