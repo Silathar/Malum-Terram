@@ -132,7 +132,7 @@ public class Pyromancer implements Listener {
 					
 				} else {
 					event.setDamage(22.0);
-					player.sendMessage("Phoenix Damage: " + event.getFinalDamage());
+					player.sendMessage("Damage: " + event.getFinalDamage());
 				}
     			
     		}
@@ -142,12 +142,15 @@ public class Pyromancer implements Listener {
 		if(event.getDamager() instanceof Entity) {
 			Player player = (Player) event.getEntity();
 			if (!(event.getDamager().getName() == player.getName())) {
+				//if damager is not player name
 				if (event.getDamager().getType() == EntityType.ARROW) {
 					//hit by arrow
 					int foo = (int) (Math.random() * 100);
 					
 					if (foo < 50) {
+						event.setCancelled(true);
 						event.getDamager().remove();
+						player.sendMessage(ChatColor.AQUA + "Burned arrow!");
 					}
 				} else {
 					//Hit by mob
@@ -155,8 +158,6 @@ public class Pyromancer implements Listener {
 				}
 				
 			}
-			
-			Bukkit.broadcastMessage(event.getDamager().getName());
 	    }
     }
 }
